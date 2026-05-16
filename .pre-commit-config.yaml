@@ -1,0 +1,8 @@
+# Pre-commit hooks for this repo.
+# Installed by 5-Operations/Scripts/install-pre-commit-hooks.sh.
+# To update versions: pre-commit autoupdate
+repos:
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.18.4
+    hooks:
+      - id: gitleaks
