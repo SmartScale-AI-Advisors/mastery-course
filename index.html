@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>On the Pursuit of Mastery — A Field Manual</title>
+<meta name="description" content="A ten-week program for men in their twenties, drawn from Greene, the Stoics, Chamine, Jay, Epstein, and Newport." />
+<meta name="robots" content="noindex, nofollow" />
+<meta name="theme-color" content="#1a1611" />
+
+<!-- Open Graph / social -->
+<meta property="og:title" content="On the Pursuit of Mastery — A Field Manual" />
+<meta property="og:description" content="A ten-week program for men in their twenties." />
+<meta property="og:type" content="website" />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #1a1611;
+    color: #d4c5a9;
+    font-family: Georgia, "Times New Roman", serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  * { box-sizing: border-box; }
+</style>
+
+<!-- React + ReactDOM from CDN -->
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<!-- Babel to compile JSX in the browser -->
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" data-type="module">
+const { useState, useEffect } = React;
+
+function MasteryGuide() {
+  const [activeWeek, setActiveWeek] = useState(0);
+  const [completed, setCompleted] = useState({});
+  const [notes, setNotes] = useState({});
+  const [loaded, setLoaded] = useState(false);
+  const [view, setView] = useState('overview'); // overview | program | manual
+
+  // Load persisted state from localStorage
+  useEffect(() => {
+    try {
+      const c = localStorage.getItem('mastery:completed');
+      if (c) setCompleted(JSON.parse(c));
+    } catch (e) {}
+    try {
+      const n = localStorage.getItem('mastery:notes');
+      if (n) setNotes(JSON.parse(n));
+    } catch (e) {}
+    setLoaded(true);
+  }, []);
+
+  const saveCompleted = (next) => {
+    setCompleted(next);
+    try { localStorage.setItem('mastery:completed', JSON.stringify(next)); } catch (e) {}
+  };
+
+  const saveNotes = (next) => {
+    setNotes(next);
+    try { localStorage.setItem('mastery:notes', JSON.stringify(next)); } catch (e) {}
+  };
+
+  const toggleTask = (weekIdx, taskIdx) => {
+    const key = `${weekIdx}-${taskIdx}`;
+    const next = { ...completed, [key]: !completed[key] };
+    saveCompleted(next);
+  };
+
+  const program = [
+    {
+      week: 1,
+      title: 'The Ground',
+      epigraph: '"It is not what happens to you, but how you react to it that matters." — Epictetus',
+      principle: 'Before you can do the work of mastery, you must become a man who can do the work. The rest of this program asks you to examine your life honestly, submit to apprenticeship, ship work that may fail, and absorb criticism without collapse. None of that is possible from a mind that hijacks itself the moment things get hard. This first week is therefore not about goals. It is about building the internal capacity — the steady ground — on which everything else stands. Two traditions point to the same ground from different sides: the Stoics from the philosophical side, with the inner citadel and daily self-examination; Shirzad Chamine\'s Positive Intelligence framework from the neuroscientific side, with the Saboteurs and Sage. Together they describe one practice: notice the inner alarm, refuse to obey it without examination, choose a response rather than be commanded by one.',
+      greene: 'Every master Greene profiles shares one trait beneath the surface: they could stay with discomfort longer than other people. Faraday could clean bottles for years without becoming bitter. Bill Bradley could practice the same dribble move for ten thousand reps without losing focus. This is not stoic posturing; it is a trained nervous system. The men who quit at every stage of the apprenticeship do so because their internal alarm system fires at things that are not actually emergencies — a moment of boredom, a piece of criticism, a flicker of self-doubt — and they obey the alarm. Mastery requires learning, before anything else, to not obey it.',
+      stoic: 'The Stoic tradition has a two-thousand-year-old technology for this. Marcus Aurelius rose each morning and reminded himself of the day\'s likely difficulties — the ungrateful, the arrogant, the dishonest — so that when they arrived he was not surprised by them. Seneca examined each evening: "What bad habit have I cured today? What fault have I resisted? In what respect am I better?" Epictetus taught that no event itself disturbs us — only our judgment of it. The inner citadel is the unconquered place in you that no one reaches without your permission. Chamine\'s Positive Intelligence framework gives this ancient idea a modern operating system. The negative voices that hijack you come from ten patterns called Saboteurs, with the Judge as the master Saboteur. The positive responses come from the Sage. The work is mechanical: catch the Saboteur, weaken it by naming it, perform a PQ Rep — ten seconds of full attention to a physical sensation — and choose a Sage response. Neuroscience confirms what the Stoics intuited: this is a trainable capacity, built by repetition, that compounds over a lifetime.',
+      tasks: [
+        'Take Chamine\'s free Saboteur Assessment at positiveintelligence.com. Identify your top two Saboteurs — the inner voices most likely to derail you. The Judge will be one of them; that is universal. Write down when and how they tend to show up.',
+        'Build a daily PQ Rep practice through habit stacking: attach one 10-second present-moment attention exercise to each existing morning routine activity — brushing teeth, making coffee, the first sip of water. Total daily commitment: under one minute. The rule is "Sage before Saboteur" — do it before checking your phone.',
+        'Begin a Stoic daily examen: a brief written review each evening for the full week. Three questions, as Seneca practiced them — What did I do badly today? What did I do well? What will I do differently tomorrow? Five minutes, no more. The point is not perfection. The point is to make your own life visible to yourself before another week passes without examination.',
+        'Practice the "Catch the Judge" move this week. When the Judge fires — "you are not good enough," "they are the problem," "this is a disaster" — name it: "That is the Judge." Then briefly celebrate the catch. The celebration releases dopamine and reinforces the habit. Fake it if you have to. The Judge will resist being celebrated, which is exactly why you do it.',
+      ],
+      reflection: 'Which Saboteur has been running my life under the name of "just how I am"?',
+    },
+    {
+      week: 2,
+      title: 'The Calling',
+      epigraph: '"The future belongs to those who learn several skills and combine them in creative ways." — Robert Greene',
+      principle: 'Before you can master anything, you must know what to master — but the search is more complicated than it sounds. Greene says trace your primal inclinations. Newport says passion follows mastery, not the other way around. Both are right, and the contradiction is the point: you need enough early signal to choose a direction, and enough humility to know the love comes later, after the skill does.',
+      greene: 'Greene locates evidence of your Life\'s Task in primal inclinations — what you were drawn to between ages six and fourteen, before social comparison hijacked you. Einstein was given a compass at five and chased that question his whole life. V. S. Ramachandran, who became one of the most original neuroscientists of his generation, collected weird seashells as a boy and lingered in museums in front of jars of human birth defects — drawn to the outliers, the strange, the abnormal. That childhood pattern became the adult career. Paul Graham found his work partly by cataloguing what he hated — bureaucracy, sales, academia — and inverting it. Greene\'s claim is not that you should chase a forgotten passion; it is that the evidence of who you are is already in the record, written in what you returned to as a child without being told to. The fire goes out, but the embers remain.',
+      stoic: 'David Epstein\'s research in Range argues that most high performers in complex fields are not early specialists but late samplers — Roger Federer played every sport before tennis, Frances Hesselbein wandered for decades before leading the Girl Scouts. Epstein\'s sharper point: in complex domains the data shows early specialists actually fall behind generalists. The anxiety you feel about not having "picked a lane" is the wrong anxiety. Cal Newport pushes from a different angle: "follow your passion" is bad advice if it makes you wait for certainty before doing the work. Resolve the tension this way — Greene gives you the direction; Newport gives you the means. You use primal inclinations to choose where to apprentice, then you trust that the deeper engagement, the real love, will arrive through the work itself. The Stoic move is to act before you feel ready and let the doing teach you who you are.',
+      tasks: [
+        'Write down five things you were obsessed with between ages 6 and 14. Look for the ones still tugging at you when you scroll today.',
+        'List three things you genuinely hate about how your field operates — the bureaucracy, the BS, the work you refuse. Paul Graham found his calling by tracing what he hated. The inverse points to what you love.',
+        'Identify one ambition you currently hold that you suspect is borrowed from a parent, a peer, or an algorithm. Name the source. Hold it up to the light.',
+        'Define your decade-long domain in one sentence — but do not over-narrow it. Greene rejects the pure hedgehog; Range backs him with data. Aim for two or three skills you can eventually combine into something only you could make.',
+      ],
+      reflection: 'What did I do at twelve, without supervision, that I still recognize in myself?',
+    },
+    {
+      week: 3,
+      title: 'Submit to Reality',
+      epigraph: '"It is impossible for a man to learn what he thinks he already knows." — Epictetus',
+      principle: 'You enter the work world naive, ignorant, and full of ideas that have not been tested. This is not a mark against you — it is simply the truth. The fastest way out of it is to shut your ego down and start observing. The goal is not to perform competence you have not earned. It is to build what Cal Newport calls career capital — rare and valuable skills — and what Meg Jay calls the broader identity capital: the accumulated skills, credentials, experiences, scars, and reference points that become the currency of every later decade. The job that pays well but teaches nothing is a worse trade than the job that pays half and builds the platform. The 26-year-old who chooses identity capital over comfort is not delaying his life. He is funding it.',
+      greene: 'Greene\'s apprenticeship has three distinct phases. Deep observation: absorb the rules, the politics, the unwritten code of the room. Skill acquisition: practice the fundamentals until your body knows them without your mind. Experimentation: test what you have learned against reality and let reality correct you. Most men skip phase one and stall in phase two. Greene gives a specific piece of unfashionable advice: in your twenties, take the lower-paying job that puts you closer to skilled work and skilled people. The high-paying job that does not build skills locks you into a paycheck-dependency from which most never recover. Michael Faraday, son of a blacksmith, taught himself science as a bookbinder\'s apprentice — building his own encyclopedia, attending lectures, copying them out by hand until they were engraved in his brain. He earned his way into Humphry Davy\'s laboratory by demonstrating he was already disciplined before anyone asked him to be. Meg Jay\'s research adds the warning: men who skip the apprenticeship years — the underemployed, the perpetually-finding-themselves, the still-deciding — find at 35 that they have no capital to spend and no leverage to negotiate with. The twenties are when this account gets opened, or doesn\'t.',
+      stoic: 'When Faraday finally got the apprenticeship, his first months were spent cleaning bottles and sweeping the lab. He observed for two hours, scrubbed for four. The Stoic accepts this without resentment. Epictetus himself was a slave before he was a philosopher. The work that builds a man is rarely the work that flatters him. This is also where the Judge Saboteur from Week 1 will scream loudest: "you are better than this," "this is beneath you," "your friends are ahead of you." Chamine\'s key move here is the distinction between Sage Discernment and Judge Judgment — both can see the same fact, but only the Judge wraps it in emotional charge. Discernment: "this task is unglamorous." Judgment: "I am unworthy because I am doing it." The first is information you can use. The second is a Saboteur masquerading as a moral compass. Name it. Do the work anyway.',
+      tasks: [
+        'Identify the person 10–15 years ahead of you in your craft. Study not their highlight reel but how they spent their twenties — the unglamorous work that built the platform.',
+        'Audit your identity capital. Make four columns: skills, credentials, experiences, reference points (people who would vouch for you, places you have worked, scars you have learned from). What do you actually have? What is one piece you most need to add in the next two years — and what is the unglamorous work that adds it?',
+        'Find your weakest fundamental skill in your craft. Schedule four hours this week practicing only that. Bill Bradley wore glasses that blocked the basketball so he had to dribble blind. Pick your equivalent.',
+        'Stop performing expertise on social media for one full week. Notice what that withdrawal feels like. The ego signal is the lesson.',
+      ],
+      reflection: 'Where am I performing competence I have not yet earned, and what is that costing me in actual capital?',
+    },
+    {
+      week: 4,
+      title: 'Time and the Long Horizon',
+      epigraph: '"You could leave life right now. Let that determine what you do and say and think." — Marcus Aurelius',
+      principle: 'Mastery requires a paradoxical relationship with time and money: act as if you have decades, and as if you might die Friday. One gives you patience. The other gives you urgency. And learn now to live on little, because fear of losing income is what traps men in work that is killing them.',
+      greene: 'Greene is explicit: learn in your twenties what it is to live on five dollars a day, because if you are addicted to a paycheck at 24, you will be addicted to one at 44. The man who knows he can survive lean has a structural advantage — he can take the unpaid apprenticeship, the risky venture, the year of building. He is not afraid. Fear is the worst element in any entrepreneur or craftsman.',
+      stoic: 'William Irvine\'s update to Stoicism is the reframe technique: when something unwanted happens — a setback, a lean stretch, a missed promotion — treat it as a test designed specifically to measure your character. Not a metaphysical claim, a psychological tool. The man who reframes scarcity as training behaves entirely differently from the man who experiences it as catastrophe. Chamine\'s parallel framing is the Sage Perspective: every circumstance can be converted into a gift or opportunity. The Stoic and the PQ practitioner say the same thing in different vocabulary. The 10-second move is "Accept or Convert" — Accept it with peace, or Convert it into a gift. Either is a Sage response. The third option, continuing to feel bad about it, is the Judge stealing the rest of your day. Seneca\'s ancient version is the same: practice voluntary poverty regularly, eat coarse bread, wear rough clothes, not as theater but to discover the things you feared losing were never worth being controlled by.',
+      tasks: [
+        'Calculate your remaining productive weeks (assume age 75). Write the number where you will see it daily.',
+        'Audit last week\'s hours. How many went to deep work on your craft? How many to consumption? Be honest enough to be uncomfortable.',
+        'Practice one week of voluntary frugality: cook every meal, no purchases beyond essentials, no rideshares. When friction shows up — and it will — apply Irvine\'s reframe: this is a test, not a punishment.',
+        'Set a ten-year vision in writing. One paragraph. Date it. Seal it in a file you will open in 2036.',
+      ],
+      reflection: 'What would I attempt if I knew I could survive on half my current income?',
+    },
+    {
+      week: 5,
+      title: 'Resistance Practice',
+      epigraph: '"First say to yourself what you would be; then do what you have to do." — Epictetus',
+      principle: 'You will not improve by practicing what you are already good at. The mechanism of mastery is the opposite — you train deliberately on what resists you, on what exposes your weakness, on the parts you would rather skip. This is the work that builds the thing that looks, from outside, like talent.',
+      greene: 'Greene calls this resistance practice. Bill Bradley, a slow and uncoordinated kid who loved basketball, designed an obsessional practice schedule attacking every weakness he had. He wore glasses that blocked the basketball so he had to dribble without looking. He practiced pivot moves alone in his bedroom. On family cruises he dribbled up and down the narrow ship corridors. People who later watched him play assumed he was naturally gifted. He was not. He had spent ten thousand hours on what hurt. Greene\'s own method is the same: a notecard system, twenty to thirty cards per book, color-coded by subject — a deliberate, almost obsessive infrastructure for thinking. He looks insane to outsiders. He produces work no one else can.',
+      stoic: 'Musonius Rufus taught that the body must be trained because the soul uses the body in every act of virtue. A man who cannot make himself sit with difficulty for two hours cannot make himself sit with anything difficult. Discipline is one substance; it leaks across every domain. This is also where the Avoider and the Restless Saboteurs do their most damage — "just check the phone for a second," "you can practice tomorrow," "this is boring, switch to something easier." Treat the urge to flee the work as data, not as command. A ten-second PQ Rep — full attention to a physical sensation in front of you — is enough to break the Saboteur grip and return you to the work. (In Chamine\'s vocabulary, what you are building here is the Sage Power of Activate: laser-focused action without Saboteur interference.)',
+      tasks: [
+        'Build a deliberate practice ritual: same time daily, same place, on the weakest fundamental of your craft. Two hours minimum, four days minimum, no exceptions for mood.',
+        'Build your own version of Greene\'s notecard system. Choose your input medium (notebook, app, index cards) and start capturing — themes, patterns, quotes — from everything you read or watch this week.',
+        'Choose one form of physical training. Three sessions minimum this week. Track every session. The body teaches the mind what discipline feels like.',
+        'Practice one voluntary discomfort this week: cold exposure, a 24-hour fast, a long walk with no phone. Build the muscle of choosing what is hard.',
+      ],
+      reflection: 'What am I outsourcing to motivation that I should be giving to structure?',
+    },
+    {
+      week: 6,
+      title: 'Mentors and Allies',
+      epigraph: '"You have power over your mind — not outside events. Realize this, and you will find strength." — Marcus Aurelius',
+      principle: 'Mastery is mostly solitary, but the conditions for it are built among other people. Two relationships will shape your craft more than any other in your twenties: the mentor who accelerates you, and the weak ties who open doors you cannot find alone. Both are usually under-thought by men your age. Both reward deliberate cultivation. Neither happens by drift.',
+      greene: 'Mentors do not help out of altruism. Greene is blunt: mentor relationships are mutual self-interest, and the apprentice who imagines otherwise will not get one. You earn a mentor by offering something — competence, coverage of their weakness (often something digital and current that they cannot do), patience with menial work — and by demonstrating you can take criticism without taking it personally. Greene\'s own apprentice, Ryan Holiday, got the job because he was serious, he could fix a Wikipedia page Greene could not, and he did not flinch when corrected. The trade is real. Greene gets digital coverage, organizational help, work he doesn\'t want to do. Holiday gets writing instruction, professional connections, a future. If the trade is one-sided in either direction, the relationship will not last.',
+      stoic: 'Benjamin Franklin, young and self-righteous in a London print shop, refused to contribute to the workers\' beer fund — they shouldn\'t drink, his money shouldn\'t fund it, the logic was airtight. Within weeks, mysterious proofreading errors began appearing in his work. He was nearly fired before he understood: he was not there to reform the culture; he was there to learn it. The Stoic inner citadel does not mean rigid righteousness; it means accepting reality as it is, including the irrational politics of every room. Meg Jay adds the structural argument that the relationships shaping your twenties are not just the close ones. Drawing on Mark Granovetter\'s research, she points out that most job opportunities, most introductions to new worlds, and most career-defining breaks come from weak ties — acquaintances, former colleagues, people you met once. Your close friends know what you know. The weak ties know what you don\'t. Twentysomethings systematically over-invest in the inner circle and under-invest in the periphery, then wonder why no opportunities arrive.',
+      tasks: [
+        'Identify one potential mentor 10–15 years ahead of you. Before you reach out, find what you can specifically offer them — a skill they lack, a tedious task done well, coverage of a digital weakness. Approach with the offer, not with your ambition.',
+        'List ten weak ties — acquaintances, former colleagues, people you met once at a conference, friends of friends — who know things you do not. Pick three and reach out this week with a specific question or genuine update. Not networking; contact with substance.',
+        'Identify one "beer fund" moment from your last month — a time you stood on principle and missed the actual game being played. Write down what was really being asked of you.',
+        'Practice strategic silence in one conversation this week: listen completely, contribute only what is essential. Notice what you learn that you would have missed while talking.',
+      ],
+      reflection: 'Whose approval am I still optimizing for, and is it costing me my actual work?',
+    },
+    {
+      week: 7,
+      title: 'The Partner Question',
+      epigraph: '"Associate with those who will make a better man of you. Welcome those whom you yourself can improve." — Seneca, Letters from a Stoic',
+      principle: 'The work weeks of this program are flattering. They are about becoming a master, finding your craft, building your capital. This week is harder because it is less flattering: the partner you choose by 30 may matter more than the job you choose, and most men under-think it severely. They marry whoever they happened to be dating at 28. Then they spend their thirties either compounding with that person or being slowly undermined by them. The choice is decade-defining. It deserves a decade-defining level of attention.',
+      greene: 'Greene does not write directly about romantic partnership in Mastery, but his framework applies cleanly. Just as you would not apprentice yourself to a mentor whose values you do not share, you should not bind your decade to a partner whose direction is incompatible with yours. The same questions Greene asks about a craft — what does this require of me, who do I become through this, where does this path lead in twenty years — apply here. A partner is not the same as a craft; she is her own person with her own life. But she is also the single most influential environment your craft will exist within. Drift on this decision and you risk the rest.',
+      stoic: 'Meg Jay\'s clinical research on twentysomethings repeatedly returns to the partner question because it is the one her patients most regret getting wrong. The cohabitation effect — that couples who move in together without explicit commitment are more likely to slide into marriages they would not have chosen deliberately — is one of the most replicated findings in her field. The Stoic move is to apply the same clear-eyed examination to this decision that you would apply to a business partnership, a career change, or a major investment. This does not mean treating it transactionally. It means refusing to let inertia decide it. The Sage Discernment of Week 3 is the right tool — facts without emotional charge, then a deliberate choice. "I love being around her" is a feeling. "We are building toward the same kind of life" is discernment. (Chamine names the underlying Sage capacity Empathize — the ability to see another person, and yourself in relation to them, with appreciation rather than judgment. Useful here.)',
+      tasks: [
+        'Write, honestly, what you actually want your life to look like at 40 — work, family, location, daily texture. Not what is impressive. What you want. Do not edit for realism yet.',
+        'If you are currently partnered: spend an hour writing whether you are building toward that life together, or just sharing rent and routine. Is she walking in your direction, or are you slowing to match hers? Is that a trade you would consciously choose? Be honest with yourself before being honest with her.',
+        'If you are not currently partnered: name the qualities that actually matter for the life you described — not what you find attractive in the moment, but what compounds over decades. Then look at where and how you are currently spending your social time. Is it likely to introduce you to someone like that? If not, what would?',
+        'Either way: identify one inherited assumption about partnership you have not examined — about timeline, traditional roles, what marriage is for, what your parents modeled, what your peers are doing. Hold it up to the light. Decide if you actually believe it.',
+      ],
+      reflection: 'Am I making this decision, or letting it be made for me?',
+    },
+    {
+      week: 8,
+      title: 'Failure as Information',
+      epigraph: '"The impediment to action advances action. What stands in the way becomes the way." — Marcus Aurelius',
+      principle: 'You are going to fail repeatedly between now and your mid-thirties. The men who become masters are not the ones who fail less — they are the ones who extract more from each failure and recover their nerve faster.',
+      greene: 'Greene calls it "fingertip feel" — the calibration that comes only from repeated contact with reality. Theory will not give it to you. Books will not give it to you. Only shipped work, public attempts, and survived failures will. You earn it the way Faraday earned his lab — through years of small, unrewarded competence accumulating into something undeniable. Cal Newport sharpens the point for modern work: the deep work you produce in private is only career capital once it has been shipped into the world and met a reader, a user, a customer. The hidden file on your hard drive is not capital. The thing you released, however imperfectly, is.',
+      stoic: 'This is where William Irvine\'s reframe technique does its hardest work — and where the Judge Saboteur from Week 1 will be most active. When something goes wrong — a project flops, a person rejects you, a piece of public work gets torn apart — the Judge immediately writes a story: you are not good enough, you should have known, this proves what you secretly feared. Irvine\'s move is to interrupt that story before it sets, and frame the event as a test designed to measure exactly the trait you most need to develop. Combined with the PQ practice of naming the Judge and running a brief rep to return to present-moment attention, you arrive at a workable response: this is information, not identity. Failure becomes data, not a verdict.',
+      tasks: [
+        'Ship one piece of work publicly this week — imperfect, exposed, named. Do not optimize past 80 percent. The point is the contact with reality, not the polish.',
+        'After it lands, write a one-page post-mortem. What was correct? What was naive? What is the next experiment?',
+        'Identify one recent failure or rejection. Apply Irvine\'s reframe in writing: what trait was this designed to develop in me, and how would the man who passed the test have responded?',
+        'Sit with one criticism you received recently. Steelman it. Take what is true. Discard the rest without resentment.',
+      ],
+      reflection: 'What am I avoiding because failure would be visible, and what is that avoidance costing me?',
+    },
+    {
+      week: 9,
+      title: 'Combination and Originality',
+      epigraph: '"All that exists is the seed of what shall emerge from it." — Marcus Aurelius',
+      principle: 'After enough apprenticeship, the rules become visible — and so do the gaps in them. Originality is not invention from nothing. It is the intelligent combination of fields you have absorbed deeply enough to recombine. This is where your decade of work starts to look, from outside, like genius.',
+      greene: 'Greene\'s favorite example is Yoki Matsuoka: electrical engineering, then robotics, then artificial intelligence, then neuroscience. Four fields, each mastered, then combined to design a prosthetic hand that connects to the human brain. No one else could have built it because no one else had that exact stack. V. S. Ramachandran did the opposite — he narrowed, from medicine to optics to visual psychology to brain disorders, each step closer to the niche only he could occupy. Both paths work.',
+      stoic: 'David Epstein\'s Range provides the empirical case Greene gestures at — and pushes further than Greene himself goes. The conventional wisdom that you should pick a lane at 22 and specialize early is not just wrong; in complex domains, the data shows early specialists actively fall behind generalists. Roger Federer played dozens of sports before tennis. Frances Hesselbein wandered for decades before leading the Girl Scouts. The pattern repeats across science, art, business, and military leadership. If you are currently anxious about not having committed to one thing, the research is on your side. Epstein\'s key distinction is between "kind" learning environments — chess, classical music, golf — where rules are stable, feedback is immediate, and early specialization wins; and "wicked" environments — most knowledge work, most creative work, most leadership — where rules shift, feedback is delayed, and breadth wins. The advice to specialize early is correct for chess players. It is the wrong advice for almost everyone else. Combine deliberately. The future belongs to the man with five real skills and the imagination to fuse them.',
+      tasks: [
+        'List the three to six skills or fields you have meaningfully invested in. Now ask: which two or three has no one else combined? That intersection is your opening.',
+        'Identify one rule in your field that everyone follows. Ask why. If the answer is weak or merely habitual, you may have found something to violate intelligently.',
+        'Start one project this week that no one asked for, has no audience, and you cannot justify economically. This is where your real voice lives.',
+        'Keep a daily idea log for the full week — anything that snags your attention, no filter. Review it Sunday for patterns. The patterns are signal.',
+      ],
+      reflection: 'Where am I still imitating when I could be combining?',
+    },
+    {
+      week: 10,
+      title: 'The Cycle of Accelerated Returns',
+      epigraph: '"Waste no more time arguing about what a good man should be. Be one." — Marcus Aurelius',
+      principle: 'You will not feel like a master after ten weeks. You will not feel like one after ten years. Mastery is not a destination; it is a direction — and the practice itself becomes the reward. The men who quit do so because they expected practice to feel like drudgery forever. It does not.',
+      greene: 'Greene calls it the cycle of accelerated returns. You practice something. You get better. Better is more fun. More fun means you practice harder. Harder practice produces faster improvement. The cycle compounds. Bill Bradley did not find dribbling tedious after a month — he found it electrifying, because he could now do something he could not do before. The mistake is to confuse the first weeks of practice with what practice eventually feels like. Push through that window, and the work itself becomes the life worth living.',
+      stoic: 'Marcus Aurelius, in his last years as emperor, wrote to himself: "You have endured countless troubles through not being content with your reason doing the work it was made for." The work of becoming who you are. That work has no terminus, and that is the gift. The Stoic does not finish; he keeps walking, with progressively better company — his own. In the PQ vocabulary, the goal across ten weeks has been to spend more of your life in the Sage state and less in the grip of the Saboteurs. You will not eliminate the Judge or the Avoider — they were laid down too early for that. But you can name them faster, recover quicker, and choose differently more often. Each year, a higher percentage of your hours operate from the Sage. That is what mastery actually looks like from the inside.',
+      tasks: [
+        'Review weeks 1–9. Which principles landed? Which slid off? Be honest about both. The ones that slid off are usually where the actual growth is waiting.',
+        'Choose three practices from this program to keep permanently. Make them how you live, not what you tried for ten weeks.',
+        'Re-read your Week 4 ten-year vision. Edit it. Make it harder, truer, more yours. Most men aim too low and call it humility. It is fear.',
+        'Schedule a quarterly review for the next ten years — same questions, same honesty. Forty checkpoints. Watch yourself become.',
+      ],
+      reflection: 'Who do I want to be at 36? At 46? Am I currently walking toward that man, or away from him?',
+    },
+  ];
+
+  const totalTasks = program.reduce((sum, w) => sum + w.tasks.length, 0);
+  const completedCount = Object.values(completed).filter(Boolean).length;
+  const progress = Math.round((completedCount / totalTasks) * 100);
+
+  // Manual sections — the philosophical foundation
+  const manual = [
+    {
+      title: 'I. What This Is',
+      body: 'This is not a self-help program. There is no transformation promised. What follows is a structured ten weeks of attention, drawn from six intersecting sources: Shirzad Chamine on building the inner ground, Robert Greene\'s study of how masters develop, William Irvine on practical Stoicism, Meg Jay on why the twenties matter, David Epstein on the case for breadth, and Cal Newport on what passion actually requires. Beneath the modern voices, the older one: Stoic philosophy as practiced by men who governed empires and slaves alike. All of them assume the same thing: that a life worth living is built, not stumbled into. That the building is hard. That the work is mostly invisible.',
+    },
+    {
+      title: 'II. Why 26',
+      body: 'You are in what Greene calls the apprenticeship years — roughly ages 22 to 32. The window is narrow and the stakes are high. Meg Jay\'s research makes the case bluntly: 80% of life\'s most defining moments happen by age 35, the first two-thirds of your brain\'s adult shape is set by 30, and the decade you are in now is when you accumulate identity capital, choose a partner, and decide what work you will be good at. The cultural story that "30 is the new 20" is false and expensive — it costs men a decade of compounding. Greene\'s warning is sharper still: if you fake your way through your twenties in a borrowed ambition because the money is decent, you will arrive at 35 disconnected, depressed, drinking, and you will not be able to name why. Mastery is achievable from any starting age, but the trajectory is set early. Your peers are mostly drifting. Your structural advantage at 26 is to not drift, and to learn — while it is still easy — how to live on little, so fear of losing income never decides your life for you.',
+    },
+    {
+      title: 'III. How To Use It',
+      body: 'One week at a time, in order. Week 1 — The Ground — comes first deliberately. Skipping it to "get to the real content" is the surest way to fail the program, because the real content asks you to do things your Saboteurs are designed to prevent. Build the foundation first; the rest will hold. From Week 2 onward: read the principle on Monday, carry the reflection question through the week, complete the four tasks before Sunday. Resist the urge to race ahead. The point is not consumption of material; it is the slow rewiring of how you operate. If you finish a week without doing the tasks, you have not finished the week. Repeat it.',
+    },
+    {
+      title: 'IV. What This Asks Of You',
+      body: 'Honesty, mostly. The exercises require you to look at your life as it actually is — what you spend hours on, whose approval you crave, what you avoid. This is uncomfortable. The discomfort is the work. There is no version of mastery that does not begin with seeing yourself clearly. Greene calls it "the harsh reality" phase. The Stoics called it the daily examination. You can call it whatever you want; just do it.',
+    },
+    {
+      title: 'V. Further Reading',
+      body: 'This manual is a distillation, not a substitute. Six sources sit underneath it and reward direct reading. Shirzad Chamine, Positive Intelligence — the practical and neuroscientifically grounded framework for the inner work that begins this program, with the free Saboteur Assessment as the right starting point. Robert Greene, Mastery — the foundational text for the program\'s structure, with deep biographical case studies of figures from Faraday to Einstein to Paul Graham. William Irvine, The Stoic Challenge — the most useful modern handbook for Stoic practice, particularly the reframe technique for handling setbacks, scarcity, and rejection. Meg Jay, The Defining Decade — a clinical psychologist\'s argument that the twenties matter more than the culture pretends, with research-grounded advice on identity capital, weak ties, and the partner question. David Epstein, Range — the empirical case that breadth beats early specialization in nearly every complex field. Cal Newport, So Good They Can\'t Ignore You — the productive counter-argument to follow-your-passion thinking, with the career-capital framework that makes apprenticeship economically rational. Read Chamine, Greene, and Jay first if you read nothing else.',
+    },
+  ];
+
+  if (!loaded) {
+    return (
+      <div style={{
+        minHeight: '100vh',
+        backgroundColor: '#1a1611',
+        color: '#d4c5a9',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: 'Georgia, "Times New Roman", serif',
+        fontStyle: 'italic',
+        letterSpacing: '0.05em',
+      }}>
+        Loading...
+      </div>
+    );
+  }
+
+  return (
+    <div style={{
+      minHeight: '100vh',
+      backgroundColor: '#1a1611',
+      color: '#d4c5a9',
+      fontFamily: 'Georgia, "Times New Roman", serif',
+      padding: '0',
+      backgroundImage: 'radial-gradient(circle at 20% 30%, rgba(80, 50, 20, 0.15) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(100, 70, 30, 0.1) 0%, transparent 50%)',
+    }}>
+      <style>{`
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in { animation: fadeUp 0.6s ease-out forwards; }
+        .rule-button { transition: all 0.2s ease; cursor: pointer; }
+        .rule-button:hover { color: #e8d5a8; border-color: #8b6f3a; }
+        .week-tab { transition: all 0.2s ease; cursor: pointer; }
+        .week-tab:hover { background-color: rgba(139, 111, 58, 0.15); }
+        .task-row { transition: background-color 0.15s ease; }
+        .task-row:hover { background-color: rgba(139, 111, 58, 0.08); }
+        .checkbox-custom {
+          width: 18px; height: 18px;
+          border: 1.5px solid #8b6f3a;
+          background-color: transparent;
+          cursor: pointer;
+          flex-shrink: 0;
+          margin-top: 4px;
+          transition: all 0.2s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .checkbox-custom.checked {
+          background-color: #8b6f3a;
+        }
+        .checkbox-custom.checked::after {
+          content: '✓';
+          color: #1a1611;
+          font-size: 14px;
+          font-weight: bold;
+        }
+        textarea.notes {
+          background: rgba(0,0,0,0.25);
+          border: 1px solid #3d3526;
+          color: #d4c5a9;
+          font-family: Georgia, serif;
+          padding: 12px;
+          width: 100%;
+          min-height: 80px;
+          resize: vertical;
+          font-size: 14px;
+          line-height: 1.6;
+          font-style: italic;
+        }
+        textarea.notes:focus {
+          outline: none;
+          border-color: #8b6f3a;
+        }
+        .ornament {
+          color: #6b5938;
+          letter-spacing: 0.5em;
+          text-align: center;
+        }
+      `}</style>
+
+      {/* Masthead */}
+      <header style={{
+        borderBottom: '1px solid #3d3526',
+        padding: '40px 60px 30px',
+        position: 'relative',
+      }}>
+        <div style={{
+          fontSize: '11px',
+          letterSpacing: '0.4em',
+          color: '#8b6f3a',
+          textTransform: 'uppercase',
+          marginBottom: '8px',
+        }}>
+          A Field Manual · Volume One
+        </div>
+        <h1 style={{
+          fontSize: 'clamp(36px, 5vw, 64px)',
+          fontFamily: '"Playfair Display", Georgia, serif',
+          fontWeight: 400,
+          margin: 0,
+          letterSpacing: '-0.02em',
+          color: '#e8d5a8',
+          lineHeight: 1.05,
+        }}>
+          On the Pursuit of Mastery
+        </h1>
+        <div style={{
+          fontSize: '14px',
+          fontStyle: 'italic',
+          color: '#a89476',
+          marginTop: '12px',
+          letterSpacing: '0.02em',
+        }}>
+          A ten-week program for men in their twenties — drawn from Greene, the Stoics, Chamine, Jay, Epstein, and Newport
+        </div>
+
+        <nav style={{
+          display: 'flex',
+          gap: '32px',
+          marginTop: '32px',
+          fontSize: '12px',
+          letterSpacing: '0.2em',
+          textTransform: 'uppercase',
+        }}>
+          {['overview', 'manual', 'program'].map(v => (
+            <button
+              key={v}
+              onClick={() => setView(v)}
+              className="rule-button"
+              style={{
+                background: 'none',
+                border: 'none',
+                borderBottom: view === v ? '1px solid #e8d5a8' : '1px solid transparent',
+                color: view === v ? '#e8d5a8' : '#8b6f3a',
+                padding: '4px 0',
+                fontFamily: 'inherit',
+                fontSize: 'inherit',
+                letterSpacing: 'inherit',
+                textTransform: 'inherit',
+              }}
+            >
+              {v === 'overview' ? 'Overview' : v === 'manual' ? 'Preface' : 'The Program'}
+            </button>
+          ))}
+        </nav>
+      </header>
+
+      {view === 'overview' && (
+        <main style={{ padding: '60px', maxWidth: '1100px', margin: '0 auto' }} className="fade-in">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '50px' }}>
+            <section>
+              <div style={{
+                fontSize: '11px',
+                letterSpacing: '0.4em',
+                color: '#8b6f3a',
+                textTransform: 'uppercase',
+                marginBottom: '20px',
+              }}>§ Premise</div>
+              <p style={{
+                fontSize: '22px',
+                lineHeight: 1.6,
+                fontStyle: 'italic',
+                color: '#d4c5a9',
+                margin: 0,
+                maxWidth: '720px',
+              }}>
+                You are twenty-six. You have, by reasonable estimate, two thousand five hundred weeks of healthy working life remaining. The decisions you make in the next ten of them will compound for the next forty years. Most men your age are not aware this window is open. Some are. This manual is for them.
+              </p>
+            </section>
+
+            <section style={{
+              borderTop: '1px solid #3d3526',
+              paddingTop: '40px',
+            }}>
+              <div style={{
+                fontSize: '11px',
+                letterSpacing: '0.4em',
+                color: '#8b6f3a',
+                textTransform: 'uppercase',
+                marginBottom: '24px',
+              }}>§ The Ten Weeks</div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' }}>
+                {program.map((w, i) => {
+                  const weekTasksCompleted = w.tasks.filter((_, ti) => completed[`${i}-${ti}`]).length;
+                  return (
+                    <div
+                      key={i}
+                      onClick={() => { setActiveWeek(i); setView('program'); }}
+                      style={{
+                        border: '1px solid #3d3526',
+                        padding: '24px',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        background: weekTasksCompleted === w.tasks.length ? 'rgba(139, 111, 58, 0.08)' : 'transparent',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.borderColor = '#8b6f3a'}
+                      onMouseLeave={e => e.currentTarget.style.borderColor = '#3d3526'}
+                    >
+                      <div style={{
+                        fontSize: '10px',
+                        letterSpacing: '0.3em',
+                        color: '#8b6f3a',
+                        textTransform: 'uppercase',
+                        marginBottom: '8px',
+                      }}>Week {w.week}</div>
+                      <div style={{
+                        fontSize: '22px',
+                        fontFamily: '"Playfair Display", Georgia, serif',
+                        color: '#e8d5a8',
+                        marginBottom: '14px',
+                      }}>{w.title}</div>
+                      <div style={{
+                        fontSize: '11px',
+                        color: '#8b6f3a',
+                        letterSpacing: '0.1em',
+                      }}>
+                        {weekTasksCompleted} / {w.tasks.length} tasks
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+
+            <section style={{
+              borderTop: '1px solid #3d3526',
+              paddingTop: '40px',
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '40px',
+            }}>
+              <div>
+                <div style={{
+                  fontSize: '11px',
+                  letterSpacing: '0.4em',
+                  color: '#8b6f3a',
+                  textTransform: 'uppercase',
+                  marginBottom: '16px',
+                }}>§ Your Progress</div>
+                <div style={{
+                  fontSize: '56px',
+                  fontFamily: '"Playfair Display", Georgia, serif',
+                  color: '#e8d5a8',
+                  lineHeight: 1,
+                }}>{progress}<span style={{ fontSize: '24px', color: '#8b6f3a' }}>%</span></div>
+                <div style={{
+                  marginTop: '12px',
+                  height: '2px',
+                  background: '#3d3526',
+                  position: 'relative',
+                }}>
+                  <div style={{
+                    position: 'absolute',
+                    left: 0,
+                    top: 0,
+                    height: '100%',
+                    background: '#8b6f3a',
+                    width: `${progress}%`,
+                    transition: 'width 0.4s ease',
+                  }} />
+                </div>
+                <div style={{
+                  fontSize: '12px',
+                  color: '#a89476',
+                  marginTop: '12px',
+                  fontStyle: 'italic',
+                }}>
+                  {completedCount} of {totalTasks} practices completed
+                </div>
+              </div>
+
+              <div>
+                <div style={{
+                  fontSize: '11px',
+                  letterSpacing: '0.4em',
+                  color: '#8b6f3a',
+                  textTransform: 'uppercase',
+                  marginBottom: '16px',
+                }}>§ The Six Voices</div>
+                <p style={{ fontSize: '14px', lineHeight: 1.7, color: '#d4c5a9', margin: 0 }}>
+                  This manual draws on six sources. <span style={{ color: '#e8d5a8', fontStyle: 'italic' }}>Shirzad Chamine</span> on the inner work — the Saboteurs and the Sage — that makes the rest possible. <span style={{ color: '#e8d5a8', fontStyle: 'italic' }}>Robert Greene</span> on how masters across history actually develop. <span style={{ color: '#e8d5a8', fontStyle: 'italic' }}>William Irvine</span> on Stoicism as a practical tool, particularly the reframe technique. <span style={{ color: '#e8d5a8', fontStyle: 'italic' }}>Meg Jay</span> on why the twenties matter and the decisions that compound from them. <span style={{ color: '#e8d5a8', fontStyle: 'italic' }}>David Epstein</span> on why breadth beats early specialization. And <span style={{ color: '#e8d5a8', fontStyle: 'italic' }}>Cal Newport</span> on career capital — why the love follows the skill, not the other way around. They do not fully agree. That is the point.
+                </p>
+              </div>
+            </section>
+
+            <div style={{ textAlign: 'center', marginTop: '20px' }} className="ornament">
+              ❦ ❦ ❦
+            </div>
+
+            <div style={{ textAlign: 'center' }}>
+              <button
+                onClick={() => { setView('program'); setActiveWeek(0); }}
+                style={{
+                  background: 'transparent',
+                  border: '1px solid #8b6f3a',
+                  color: '#e8d5a8',
+                  padding: '16px 40px',
+                  fontFamily: 'Georgia, serif',
+                  fontSize: '13px',
+                  letterSpacing: '0.3em',
+                  textTransform: 'uppercase',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#8b6f3a'; e.currentTarget.style.color = '#1a1611'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#e8d5a8'; }}
+              >
+                Begin Week One
+              </button>
+            </div>
+          </div>
+        </main>
+      )}
+
+      {view === 'manual' && (
+        <main style={{ padding: '60px', maxWidth: '720px', margin: '0 auto' }} className="fade-in">
+          <div style={{
+            fontSize: '11px',
+            letterSpacing: '0.4em',
+            color: '#8b6f3a',
+            textTransform: 'uppercase',
+            marginBottom: '30px',
+          }}>Preface</div>
+
+          {manual.map((section, i) => (
+            <section key={i} style={{ marginBottom: '50px' }}>
+              <h2 style={{
+                fontFamily: '"Playfair Display", Georgia, serif',
+                fontSize: '28px',
+                color: '#e8d5a8',
+                fontWeight: 400,
+                marginBottom: '16px',
+                letterSpacing: '-0.01em',
+              }}>{section.title}</h2>
+              <p style={{
+                fontSize: '17px',
+                lineHeight: 1.75,
+                color: '#d4c5a9',
+                margin: 0,
+              }}>{section.body}</p>
+            </section>
+          ))}
+
+          <div style={{ textAlign: 'center', marginTop: '60px' }} className="ornament">
+            ❦
+          </div>
+        </main>
+      )}
+
+      {view === 'program' && (
+        <main style={{ padding: '40px 60px 80px', maxWidth: '1200px', margin: '0 auto' }} className="fade-in">
+          {/* Week navigation */}
+          <div style={{
+            display: 'flex',
+            gap: '4px',
+            marginBottom: '40px',
+            borderBottom: '1px solid #3d3526',
+            overflowX: 'auto',
+          }}>
+            {program.map((w, i) => {
+              const allDone = w.tasks.every((_, ti) => completed[`${i}-${ti}`]);
+              return (
+                <button
+                  key={i}
+                  onClick={() => setActiveWeek(i)}
+                  className="week-tab"
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    borderBottom: activeWeek === i ? '2px solid #e8d5a8' : '2px solid transparent',
+                    color: activeWeek === i ? '#e8d5a8' : '#8b6f3a',
+                    padding: '12px 18px',
+                    fontFamily: 'Georgia, serif',
+                    fontSize: '12px',
+                    letterSpacing: '0.15em',
+                    textTransform: 'uppercase',
+                    whiteSpace: 'nowrap',
+                    cursor: 'pointer',
+                    position: 'relative',
+                  }}
+                >
+                  Wk {w.week}
+                  {allDone && <span style={{ marginLeft: '6px', color: '#8b6f3a' }}>✓</span>}
+                </button>
+              );
+            })}
+          </div>
+
+          <article key={activeWeek} className="fade-in" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '40px' }}>
+            <header>
+              <div style={{
+                fontSize: '11px',
+                letterSpacing: '0.4em',
+                color: '#8b6f3a',
+                textTransform: 'uppercase',
+                marginBottom: '12px',
+              }}>Week {program[activeWeek].week}</div>
+              <h2 style={{
+                fontSize: 'clamp(36px, 4.5vw, 56px)',
+                fontFamily: '"Playfair Display", Georgia, serif',
+                fontWeight: 400,
+                margin: '0 0 24px',
+                color: '#e8d5a8',
+                letterSpacing: '-0.02em',
+                lineHeight: 1.1,
+              }}>{program[activeWeek].title}</h2>
+              <blockquote style={{
+                borderLeft: '2px solid #8b6f3a',
+                paddingLeft: '24px',
+                margin: 0,
+                fontSize: '17px',
+                fontStyle: 'italic',
+                color: '#a89476',
+                lineHeight: 1.6,
+                maxWidth: '720px',
+              }}>
+                {program[activeWeek].epigraph}
+              </blockquote>
+            </header>
+
+            <section style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+              gap: '40px',
+              borderTop: '1px solid #3d3526',
+              paddingTop: '40px',
+            }}>
+              <div>
+                <div style={{
+                  fontSize: '10px',
+                  letterSpacing: '0.4em',
+                  color: '#8b6f3a',
+                  textTransform: 'uppercase',
+                  marginBottom: '14px',
+                }}>The Principle</div>
+                <p style={{ fontSize: '17px', lineHeight: 1.75, color: '#d4c5a9', margin: 0 }}>
+                  {program[activeWeek].principle}
+                </p>
+              </div>
+              <div>
+                <div style={{
+                  fontSize: '10px',
+                  letterSpacing: '0.4em',
+                  color: '#8b6f3a',
+                  textTransform: 'uppercase',
+                  marginBottom: '14px',
+                }}>Greene</div>
+                <p style={{ fontSize: '15px', lineHeight: 1.75, color: '#a89476', margin: 0 }}>
+                  {program[activeWeek].greene}
+                </p>
+              </div>
+              <div>
+                <div style={{
+                  fontSize: '10px',
+                  letterSpacing: '0.4em',
+                  color: '#8b6f3a',
+                  textTransform: 'uppercase',
+                  marginBottom: '14px',
+                }}>The Stoics</div>
+                <p style={{ fontSize: '15px', lineHeight: 1.75, color: '#a89476', margin: 0 }}>
+                  {program[activeWeek].stoic}
+                </p>
+              </div>
+            </section>
+
+            <section style={{
+              borderTop: '1px solid #3d3526',
+              paddingTop: '40px',
+            }}>
+              <div style={{
+                fontSize: '11px',
+                letterSpacing: '0.4em',
+                color: '#8b6f3a',
+                textTransform: 'uppercase',
+                marginBottom: '24px',
+              }}>The Practice — Four Tasks</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                {program[activeWeek].tasks.map((task, ti) => {
+                  const key = `${activeWeek}-${ti}`;
+                  const done = completed[key];
+                  return (
+                    <div
+                      key={ti}
+                      className="task-row"
+                      onClick={() => toggleTask(activeWeek, ti)}
+                      style={{
+                        display: 'flex',
+                        gap: '18px',
+                        padding: '16px 18px',
+                        cursor: 'pointer',
+                        borderBottom: '1px solid #2a2418',
+                      }}
+                    >
+                      <div className={`checkbox-custom ${done ? 'checked' : ''}`} />
+                      <div style={{
+                        fontSize: '16px',
+                        lineHeight: 1.6,
+                        color: done ? '#6b5938' : '#d4c5a9',
+                        textDecoration: done ? 'line-through' : 'none',
+                        flex: 1,
+                      }}>
+                        {task}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+
+            <section style={{
+              borderTop: '1px solid #3d3526',
+              paddingTop: '40px',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+              gap: '40px',
+            }}>
+              <div>
+                <div style={{
+                  fontSize: '11px',
+                  letterSpacing: '0.4em',
+                  color: '#8b6f3a',
+                  textTransform: 'uppercase',
+                  marginBottom: '14px',
+                }}>Carry This Question</div>
+                <p style={{
+                  fontSize: '20px',
+                  fontFamily: '"Playfair Display", Georgia, serif',
+                  fontStyle: 'italic',
+                  color: '#e8d5a8',
+                  margin: 0,
+                  lineHeight: 1.5,
+                }}>
+                  "{program[activeWeek].reflection}"
+                </p>
+              </div>
+              <div>
+                <div style={{
+                  fontSize: '11px',
+                  letterSpacing: '0.4em',
+                  color: '#8b6f3a',
+                  textTransform: 'uppercase',
+                  marginBottom: '14px',
+                }}>Your Notes</div>
+                <textarea
+                  className="notes"
+                  value={notes[activeWeek] || ''}
+                  onChange={e => {
+                    const next = { ...notes, [activeWeek]: e.target.value };
+                    saveNotes(next);
+                  }}
+                  placeholder="Sit with the question. Write what surfaces..."
+                />
+              </div>
+            </section>
+
+            <nav style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              borderTop: '1px solid #3d3526',
+              paddingTop: '30px',
+              marginTop: '20px',
+            }}>
+              <button
+                onClick={() => setActiveWeek(Math.max(0, activeWeek - 1))}
+                disabled={activeWeek === 0}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: activeWeek === 0 ? '#3d3526' : '#a89476',
+                  fontFamily: 'Georgia, serif',
+                  fontSize: '13px',
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  cursor: activeWeek === 0 ? 'default' : 'pointer',
+                }}
+              >
+                ← Previous Week
+              </button>
+              <button
+                onClick={() => setActiveWeek(Math.min(program.length - 1, activeWeek + 1))}
+                disabled={activeWeek === program.length - 1}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: activeWeek === program.length - 1 ? '#3d3526' : '#a89476',
+                  fontFamily: 'Georgia, serif',
+                  fontSize: '13px',
+                  letterSpacing: '0.2em',
+                  textTransform: 'uppercase',
+                  cursor: activeWeek === program.length - 1 ? 'default' : 'pointer',
+                }}
+              >
+                Next Week →
+              </button>
+            </nav>
+          </article>
+        </main>
+      )}
+
+      <footer style={{
+        borderTop: '1px solid #3d3526',
+        padding: '30px 60px',
+        textAlign: 'center',
+        fontSize: '11px',
+        letterSpacing: '0.3em',
+        color: '#6b5938',
+        textTransform: 'uppercase',
+      }}>
+        ❦ &nbsp; Finis &nbsp; ❦
+      </footer>
+    </div>
+  );
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<MasteryGuide />);
+</script>
+</body>
+</html>
