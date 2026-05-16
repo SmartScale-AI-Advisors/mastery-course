@@ -1,3 +1,9 @@
+**Owner:** Richard Bolton
+**Business function:** Personal (outside SmartScale Operate structure)
+**Linked Operate project:** `~/Library/CloudStorage/GoogleDrive-richard@smartscale-ai.com/My Drive/Projects/Active/Personal-Mastery-Course/_code.md`
+
+---
+
 # On the Pursuit of Mastery
 
 A field manual for men in their twenties. Ten weeks. Drawn from Greene, the Stoics, Chamine, Jay, Epstein, and Newport.
